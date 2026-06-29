@@ -31,6 +31,7 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            position: relative; /* Necessário para posicionar o botão absoluto na janela */
         }
 
         header {
@@ -55,29 +56,32 @@
             width: 100%;
         }
 
-        /* Painel de Administração / Login */
+        /* Botão Secreto no Canto Superior Direito */
         .admin-trigger-zone {
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 15px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 999;
         }
 
         .btn-toggle-admin {
             background: transparent;
-            border: 1px dashed var(--border-color);
-            color: var(--text-muted);
-            padding: 6px 12px;
-            border-radius: 6px;
+            border: none;
+            color: #1a2333; /* Cor bem escura para camuflar no fundo */
+            font-size: 1.1rem;
             cursor: pointer;
-            font-size: 0.85rem;
+            padding: 8px;
+            border-radius: 5px;
+            transition: color 0.3s, background-color 0.3s;
         }
 
+        /* Revela sutilmente apenas quando passa o mouse por cima */
         .btn-toggle-admin:hover {
-            border-color: var(--accent-color);
-            color: #fff;
+            color: var(--text-muted);
+            background-color: rgba(255, 255, 255, 0.02);
         }
 
+        /* Painel de Administração / Login */
         .admin-panel {
             display: none;
             background: var(--card-bg);
@@ -125,7 +129,6 @@
         .btn-login:hover { background-color: #2563eb; }
         .btn-add { background-color: var(--accent-color); }
         .btn-add:hover { background-color: #dc2626; }
-        .btn-logout { background-color: #4b5563; }
 
         /* Buscador e Filtros */
         .search-box {
@@ -167,7 +170,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
-            padding-right: 80px; /* Espaço para botões de admin */
+            padding-right: 80px;
         }
 
         .exile-name {
@@ -247,23 +250,23 @@
 </head>
 <body>
 
+    <!-- Botão Oculto de Ajustes no topo direito extremo -->
+    <div class="admin-trigger-zone">
+        <button class="btn-toggle-admin" id="btn-toggle-view" onclick="toggleAdminPanel()">⚙️</button>
+    </div>
+
     <header>
-        <h1>Mural de Exilados do Império</h1>
+        <h1>Mural de Exílios do Império</h1>
         <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Lista pública de decretos oficiais de banimento e restrição</p>
     </header>
 
     <div class="main-container">
 
-        <!-- Zona de Ativação do Painel Administrador -->
-        <div class="admin-trigger-zone">
-            <button class="btn-toggle-admin" id="btn-toggle-view" onclick="toggleAdminPanel()">⚙️ Modificar Lista</button>
-        </div>
-
-        <!-- Painel Admin (Login Dinâmico / Cadastro) -->
+        <!-- Painel Admin Secreto (Apenas abre ao clicar na engrenagem) -->
         <div class="admin-panel" id="admin-panel">
             <!-- Tela 1: Formulário de Autenticação -->
             <div id="admin-login-box">
-                <p style="margin-bottom: 12px; font-size: 0.9rem; color: #f87171;">⚠️ Apenas o Administrador Supremo pode editar esta lista.</p>
+                <p style="margin-bottom: 12px; font-size: 0.9rem; color: #f87171;">⚠️ Identificação Imperial Necessária.</p>
                 <div class="admin-form-group">
                     <input type="email" class="admin-input" id="auth-email" placeholder="E-mail do Administrador">
                     <input type="password" class="admin-input" id="auth-password" placeholder="Senha secreta">
@@ -271,30 +274,30 @@
                 </div>
             </div>
 
-            <!-- Tela 2: Adicionar Novo Exilado (Só aparece pós login) -->
+            <!-- Tela 2: Adicionar Novo Exilado (Pós Login) -->
             <div id="admin-tools-box" style="display: none;">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 15px; align-items: center;">
                     <h3 style="color: #fff; font-size: 1.1rem;">Decretar Novo Exílio</h3>
-                    <button class="btn-inline btn-inline-delete" onclick="realizarLogout()">Sair do Painel</button>
+                    <button class="btn-inline btn-inline-delete" onclick="realizarLogout()">Fechar Modificações</button>
                 </div>
                 <div class="admin-form-group">
                     <input type="text" class="admin-input" id="exile-nome" placeholder="Nome / Apelido do Alvo" style="flex: 2;">
-                    <input type="text" class="admin-input" id="exile-autor" placeholder="Decretado por (Ex: LucasCloux)" style="flex: 1;">
+                    <input type="text" class="admin-input" id="exile-autor" placeholder="Decretado por" value="LucasCloux" style="flex: 1;">
                 </div>
                 <div class="admin-form-group" style="margin-bottom: 0;">
-                    <input type="text" class="admin-input" id="exile-motivo" placeholder="Motivo detalhado do exílio de segurança..." style="flex: 3;">
+                    <input type="text" class="admin-input" id="exile-motivo" placeholder="Motivo detalhado do exílio..." style="flex: 3;">
                     <button class="btn-action btn-add" onclick="adicionarExilio()">Aplicar Decreto</button>
                 </div>
             </div>
         </div>
 
-        <!-- Busca Geral -->
+        <!-- Filtro público -->
         <input type="text" class="search-box" id="search-input" placeholder="Filtrar exilados por codinome ou justificativa..." oninput="filtrarResultados()">
 
-        <!-- Contador Dinâmico -->
-        <div id="counter-geral" class="counter-info">Carregando dados da base imperial...</div>
+        <!-- Estatísticas públicas -->
+        <div id="counter-geral" class="counter-info">Acessando arquivos imperiais...</div>
 
-        <!-- Lista Oficial -->
+        <!-- Lista -->
         <div id="container-exilados"></div>
 
     </div>
@@ -303,7 +306,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Configuração original do banco de dados Realtime
         const firebaseConfig = {
             apiKey: "AIzaSyAfG1gFI4SoEdttmhwORZt92_9bgqJcsgw",
             authDomain: "call-9cc3b.firebaseapp.com",
@@ -321,7 +323,6 @@
         let listaExilados = [];
         let isAdminAutenticado = false;
 
-        // Funções Globais expostas ao HTML clássico
         window.toggleAdminPanel = function() {
             const panel = document.getElementById('admin-panel');
             panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
@@ -336,11 +337,10 @@
                 document.getElementById('admin-login-box').style.display = 'none';
                 document.getElementById('admin-tools-box').style.display = 'block';
                 
-                // Exibe controles de edição nos cards existentes
                 document.querySelectorAll('.card-admin-controls').forEach(el => el.style.display = 'flex');
-                alert("Autenticado com sucesso. Modo de edição ativado.");
+                alert("Modo de edição habilitado com sucesso.");
             } else {
-                alert("Acesso negado. Credenciais incorretas.");
+                alert("Código de acesso incorreto.");
             }
         }
 
@@ -355,7 +355,6 @@
             document.querySelectorAll('.card-admin-controls').forEach(el => el.style.display = 'none');
         }
 
-        // CRUD - Criar Exílio
         window.adicionarExilio = function() {
             if (!isAdminAutenticado) return;
 
@@ -364,7 +363,7 @@
             const motivo = document.getElementById('exile-motivo').value.trim();
 
             if (!nome || !motivo) {
-                alert("Preencha o Nome e o Motivo obrigatoriamente!");
+                alert("Por favor, preencha o Nome e a Justificativa.");
                 return;
             }
 
@@ -379,32 +378,25 @@
                 status: 'ativo',
                 decretadoPor: autor
             }).then(() => {
-                // Limpa os campos
                 document.getElementById('exile-nome').value = "";
                 document.getElementById('exile-motivo').value = "";
-                alert("Decreto de exílio publicado com sucesso!");
-            }).catch((err) => alert("Erro ao salvar: " + err));
+                alert("Decreto executado!");
+            });
         }
 
-        // CRUD - Atualizar Status (Perdoar)
         window.perdoarExilado = function(id, statusAtual) {
             if (!isAdminAutenticado) return;
             const novoStatus = statusAtual === 'ativo' ? 'revogado' : 'ativo';
-            
-            const itemRef = ref(db, `exilios/${id}`);
-            update(itemRef, { status: novoStatus });
+            update(ref(db, `exilios/${id}`), { status: novoStatus });
         }
 
-        // CRUD - Excluir Registro definitivamente
         window.deletarExilado = function(id) {
             if (!isAdminAutenticado) return;
-            if (confirm("Deseja apagar definitivamente este registro do histórico?")) {
-                const itemRef = ref(db, `exilios/${id}`);
-                remove(itemRef);
+            if (confirm("Deletar permanentemente este registro da história?")) {
+                remove(ref(db, `exilios/${id}`));
             }
         }
 
-        // Escuta e renderização em tempo real
         function carregarDados() {
             const exiliosRef = ref(db, 'exilios');
             onValue(exiliosRef, (snapshot) => {
@@ -415,14 +407,14 @@
                     listaExilados.push({
                         id: id,
                         nome: dados[id].nome || "Desconhecido",
-                        motivo: dados[id].motivo || "Sem justificativa anotada.",
+                        motivo: dados[id].motivo || "Nenhum histórico.",
                         dataExilio: dados[id].dataExilio || "--/--/----",
                         status: dados[id].status || "ativo",
                         decretadoPor: dados[id].decretadoPor || "Império"
                     });
                 }
 
-                listaExilados.reverse(); // Mais novos no topo
+                listaExilados.reverse();
                 renderizarMural();
             });
         }
@@ -447,7 +439,6 @@
                 let card = document.createElement('div');
                 card.className = `exile-card ${item.status === 'revogado' ? 'revogado' : ''}`;
                 
-                // Define visibilidade dos controles com base no login atual
                 const displayControl = isAdminAutenticado ? 'flex' : 'none';
 
                 card.innerHTML = `
@@ -475,11 +466,10 @@
             document.getElementById('counter-geral').innerText = `O sistema registra atualmente ${contadorAtivos} exílio(s) ativo(s) de um total de ${listaExilados.length} listados.`;
 
             if (listaExilados.length === 0) {
-                container.innerHTML = '<p class="empty-message">Nenhum registro de exílio encontrado na base imperial.</p>';
+                container.innerHTML = '<p class="empty-message">Nenhum registro localizado.</p>';
             }
         }
 
-        // Execução inicial
         carregarDados();
     </script>
 </body>
