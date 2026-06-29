@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mural de Exílios do Império</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #161f30;
+            --accent-color: #ef4444; /* Vermelho focado em exílio */
+            --accent-muted: rgba(239, 68, 68, 0.2);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: #243249;
+            --success-color: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Abas de Navegação */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        /* Container Principal */
+        .main-container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* Buscador */
+        .search-box {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.2);
+        }
+
+        /* Cards de Exilados */
+        .exile-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .exile-card.revogado {
+            border-left-color: var(--success-color);
+        }
+
+        .exile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .exile-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge.ativo { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+        .badge.revogado { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.4); }
+
+        .exile-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .exile-reason {
+            font-size: 0.95rem;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 6px;
+            line-height: 1.4;
+            color: #e5e7eb;
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+
+        /* Contador geral */
+        .counter-info {
+            background: var(--accent-muted);
+            border: 1px dashed var(--accent-color);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            color: #fca5a5;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .counter-info.green {
+            background: rgba(16, 185, 129, 0.05);
+            border-color: var(--success-color);
+            color: #6ee7b7;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 4px 0;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Lista de Exilados do Império</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Mural público de decretos oficiais e restrições de integridade</p>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" id="tab-ativos" onclick="switchTab('ativos')">Exílios Ativos 🚫</button>
+        <button class="tab-btn" id="tab-historico" onclick="switchTab('historico')">Histórico Geral 📁</button>
+    </div>
+
+    <div class="main-container">
+        <!-- Campo de busca rápida universal -->
+        <input type="text" class="search-box" id="search-input" placeholder="Buscar por apelido ou infração..." oninput="filtrarResultados()">
+
+        <!-- Seção: Exílios Ativos -->
+        <div id="section-ativos" class="view-section active">
+            <div id="counter-ativos" class="counter-info">Buscando registros ativos no servidor...</div>
+            <div id="container-ativos"></div>
+        </div>
+
+        <!-- Seção: Histórico Geral -->
+        <div id="section-historico" class="view-section">
+            <div id="counter-historico" class="counter-info green">Buscando histórico completo...</div>
+            <div id="container-historico"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Mesma estrutura de banco de dados do aplicativo principal
+        const firebaseConfig = {
+            apiKey: "AIzaSyAfG1gFI4SoEdttmhwORZt92_9bgqJcsgw",
+            authDomain: "call-9cc3b.firebaseapp.com",
+            databaseURL: "https://call-9cc3b-default-rtdb.firebaseio.com",
+            projectId: "call-9cc3b",
+            storageBucket: "call-9cc3b.firebasestorage.app",
+            messagingSenderId: "919168566449",
+            appId: "1:919168566449:web:b57c4c4020bf3cace30e90",
+            measurementId: "G-GYBCF1LG64"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let listaExilados = [];
+        let abaAtual = 'ativos';
+
+        // Conecta ao nó 'exilios' no banco de dados
+        function carregarExilados() {
+            const exiliosRef = ref(db, 'exilios');
+            onValue(exiliosRef, (snapshot) => {
+                const dados = snapshot.val() || {};
+                listaExilados = [];
+
+                for (let id in dados) {
+                    listaExilados.push({
+                        id: id,
+                        nome: dados[id].nome || "Desconhecido",
+                        motivo: dados[id].motivo || "Nenhuma justificativa anexada.",
+                        dataExilio: dados[id].dataExilio || "Data indefinida",
+                        status: dados[id].status || "ativo", // ativo ou revogado
+                        decretadoPor: dados[id].decretadoPor || "Conselho Imperial"
+                    });
+                }
+
+                // Inverte a ordem para mostrar os mais novos primeiro
+                listaExilados.reverse();
+                
+                renderizarListas();
+            });
+        }
+
+        function renderizarListas() {
+            const containerAtivos = document.getElementById('container-ativos');
+            const containerHistorico = document.getElementById('container-historico');
+            const termoBusca = document.getElementById('search-input').value.toLowerCase().trim();
+
+            containerAtivos.innerHTML = '';
+            containerHistorico.innerHTML = '';
+
+            let ativosContados = 0;
+            let historicoContados = 0;
+
+            listaExilados.forEach(item => {
+                // Filtro de pesquisa por Nome ou Motivo
+                const correspondeBusca = item.nome.toLowerCase().includes(termoBusca) || item.motivo.toLowerCase().includes(termoBusca);
+                if (!correspondeBusca) return;
+
+                // Monta o elemento HTML do card
+                let card = document.createElement('div');
+                card.className = `exile-card ${item.status === 'revogado' ? 'revogado' : ''}`;
+                card.innerHTML = `
+                    <div class="exile-header">
+                        <span class="exile-name">${item.nome}</span>
+                        <span class="badge ${item.status}">${item.status === 'ativo' ? '⚠️ Ativo' : '✅ Perdoado'}</span>
+                    </div>
+                    <div class="exile-meta">
+                        <span>📅 <strong>Data:</strong> ${item.dataExilio}</span>
+                        <span>🛡️ <strong>Origem:</strong> ${item.decretadoPor}</span>
+                    </div>
+                    <div class="exile-reason">
+                        ${item.motivo}
+                    </div>
+                `;
+
+                // Distribui o card na aba correta
+                if (item.status === 'ativo') {
+                    containerAtivos.appendChild(card);
+                    ativosContados++;
+                }
+                
+                // O histórico geral exibe absolutamente todos (Ativos e Revogados)
+                containerHistorico.appendChild(card);
+                historicoContados++;
+            });
+
+            // Atualiza os contadores superiores dinamicamente
+            document.getElementById('counter-ativos').innerText = `O Império possui ${ativosContados} decreto(s) de exílio ativo(s) no momento.`;
+            document.getElementById('counter-historico').innerText = `Total de ${historicoContados} registro(s) listado(s) no arquivo geral.`;
+
+            // Mensagens caso as listas estejam vazias
+            if (ativosContados === 0) {
+                containerAtivos.innerHTML = '<p class="empty-message">Nenhum exílio ativo encontrado.</p>';
+            }
+            if (historicoContados === 0) {
+                containerHistorico.innerHTML = '<p class="empty-message">Nenhum registro localizado no histórico.</p>';
+            }
+        }
+
+        // Alternador de Abas do Menu
+        window.switchTab = function(aba) {
+            abaAtual = aba;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            
+            if(aba === 'ativos') {
+                document.getElementById('tab-ativos').classList.add('active');
+                document.getElementById('section-ativos').classList.add('active');
+            } else {
+                document.getElementById('tab-historico').classList.add('active');
+                document.getElementById('section-historico').classList.add('active');
+            }
+            renderizarListas();
+        }
+
+        // Evento disparado a cada letra digitada no campo de busca
+        window.filtrarResultados = function() {
+            renderizarListas();
+        }
+
+        // Inicializa o carregador automático ao abrir a página
+        carregarExilados();
+    </script>
+</body>
+</html>
