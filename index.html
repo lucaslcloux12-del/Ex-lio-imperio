@@ -8,7 +8,7 @@
         :root {
             --bg-color: #0b0f19;
             --card-bg: #161f30;
-            --accent-color: #ef4444; /* Vermelho focado em exílio */
+            --accent-color: #ef4444;
             --accent-muted: rgba(239, 68, 68, 0.2);
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
@@ -36,7 +36,7 @@
         header {
             text-align: center;
             margin-top: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             max-width: 700px;
             width: 100%;
         }
@@ -50,48 +50,84 @@
             letter-spacing: 1px;
         }
 
-        /* Abas de Navegação */
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            width: 100%;
-            max-width: 700px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            padding: 12px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-muted);
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-
-        .tab-btn.active {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-            background: rgba(239, 68, 68, 0.05);
-        }
-
-        /* Container Principal */
         .main-container {
             max-width: 700px;
             width: 100%;
         }
 
-        .view-section {
+        /* Painel de Administração / Login */
+        .admin-trigger-zone {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .btn-toggle-admin {
+            background: transparent;
+            border: 1px dashed var(--border-color);
+            color: var(--text-muted);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .btn-toggle-admin:hover {
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+
+        .admin-panel {
             display: none;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
-        .view-section.active {
-            display: block;
+        .admin-form-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
         }
 
-        /* Buscador */
+        .admin-input {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px 12px;
+            background: #0b0f19;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .admin-input:focus {
+            border-color: var(--accent-color);
+        }
+
+        .btn-action {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #fff;
+            transition: 0.2s;
+        }
+
+        .btn-login { background-color: #3b82f6; }
+        .btn-login:hover { background-color: #2563eb; }
+        .btn-add { background-color: var(--accent-color); }
+        .btn-add:hover { background-color: #dc2626; }
+        .btn-logout { background-color: #4b5563; }
+
+        /* Buscador e Filtros */
         .search-box {
             width: 100%;
             padding: 12px 15px;
@@ -102,7 +138,6 @@
             font-size: 0.95rem;
             margin-bottom: 20px;
             outline: none;
-            transition: 0.2s;
         }
 
         .search-box:focus {
@@ -118,11 +153,13 @@
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 15px;
+            position: relative;
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
 
         .exile-card.revogado {
             border-left-color: var(--success-color);
+            opacity: 0.75;
         }
 
         .exile-header {
@@ -130,6 +167,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 8px;
+            padding-right: 80px; /* Espaço para botões de admin */
         }
 
         .exile-name {
@@ -165,70 +203,107 @@
             border-radius: 6px;
             line-height: 1.4;
             color: #e5e7eb;
-            border: 1px solid rgba(255,255,255,0.02);
         }
 
-        /* Contador geral */
+        /* Controles Inline do Administrador */
+        .card-admin-controls {
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            gap: 8px;
+        }
+
+        .btn-inline {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #fff;
+        }
+
+        .btn-inline-forgive { background-color: var(--success-color); }
+        .btn-inline-delete { background-color: #374151; }
+
         .counter-info {
-            background: var(--accent-muted);
-            border: 1px dashed var(--accent-color);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
             padding: 12px;
             border-radius: 8px;
             font-size: 0.9rem;
             margin-bottom: 20px;
-            color: #fca5a5;
+            color: var(--text-muted);
             text-align: center;
-            font-weight: 500;
-        }
-
-        .counter-info.green {
-            background: rgba(16, 185, 129, 0.05);
-            border-color: var(--success-color);
-            color: #6ee7b7;
         }
 
         .empty-message {
             text-align: center;
             color: var(--text-muted);
-            padding: 4px 0;
-            font-size: 0.95rem;
+            padding: 20px 0;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Lista de Exilados do Império</h1>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Mural público de decretos oficiais e restrições de integridade</p>
+        <h1>Mural de Exilados do Império</h1>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">Lista pública de decretos oficiais de banimento e restrição</p>
     </header>
 
-    <div class="nav-tabs">
-        <button class="tab-btn active" id="tab-ativos" onclick="switchTab('ativos')">Exílios Ativos 🚫</button>
-        <button class="tab-btn" id="tab-historico" onclick="switchTab('historico')">Histórico Geral 📁</button>
-    </div>
-
     <div class="main-container">
-        <!-- Campo de busca rápida universal -->
-        <input type="text" class="search-box" id="search-input" placeholder="Buscar por apelido ou infração..." oninput="filtrarResultados()">
 
-        <!-- Seção: Exílios Ativos -->
-        <div id="section-ativos" class="view-section active">
-            <div id="counter-ativos" class="counter-info">Buscando registros ativos no servidor...</div>
-            <div id="container-ativos"></div>
+        <!-- Zona de Ativação do Painel Administrador -->
+        <div class="admin-trigger-zone">
+            <button class="btn-toggle-admin" id="btn-toggle-view" onclick="toggleAdminPanel()">⚙️ Modificar Lista</button>
         </div>
 
-        <!-- Seção: Histórico Geral -->
-        <div id="section-historico" class="view-section">
-            <div id="counter-historico" class="counter-info green">Buscando histórico completo...</div>
-            <div id="container-historico"></div>
+        <!-- Painel Admin (Login Dinâmico / Cadastro) -->
+        <div class="admin-panel" id="admin-panel">
+            <!-- Tela 1: Formulário de Autenticação -->
+            <div id="admin-login-box">
+                <p style="margin-bottom: 12px; font-size: 0.9rem; color: #f87171;">⚠️ Apenas o Administrador Supremo pode editar esta lista.</p>
+                <div class="admin-form-group">
+                    <input type="email" class="admin-input" id="auth-email" placeholder="E-mail do Administrador">
+                    <input type="password" class="admin-input" id="auth-password" placeholder="Senha secreta">
+                    <button class="btn-action btn-login" onclick="realizarLogin()">Entrar</button>
+                </div>
+            </div>
+
+            <!-- Tela 2: Adicionar Novo Exilado (Só aparece pós login) -->
+            <div id="admin-tools-box" style="display: none;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px; align-items: center;">
+                    <h3 style="color: #fff; font-size: 1.1rem;">Decretar Novo Exílio</h3>
+                    <button class="btn-inline btn-inline-delete" onclick="realizarLogout()">Sair do Painel</button>
+                </div>
+                <div class="admin-form-group">
+                    <input type="text" class="admin-input" id="exile-nome" placeholder="Nome / Apelido do Alvo" style="flex: 2;">
+                    <input type="text" class="admin-input" id="exile-autor" placeholder="Decretado por (Ex: LucasCloux)" style="flex: 1;">
+                </div>
+                <div class="admin-form-group" style="margin-bottom: 0;">
+                    <input type="text" class="admin-input" id="exile-motivo" placeholder="Motivo detalhado do exílio de segurança..." style="flex: 3;">
+                    <button class="btn-action btn-add" onclick="adicionarExilio()">Aplicar Decreto</button>
+                </div>
+            </div>
         </div>
+
+        <!-- Busca Geral -->
+        <input type="text" class="search-box" id="search-input" placeholder="Filtrar exilados por codinome ou justificativa..." oninput="filtrarResultados()">
+
+        <!-- Contador Dinâmico -->
+        <div id="counter-geral" class="counter-info">Carregando dados da base imperial...</div>
+
+        <!-- Lista Oficial -->
+        <div id="container-exilados"></div>
+
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, onValue, push, update, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Mesma estrutura de banco de dados do aplicativo principal
+        // Configuração original do banco de dados Realtime
         const firebaseConfig = {
             apiKey: "AIzaSyAfG1gFI4SoEdttmhwORZt92_9bgqJcsgw",
             authDomain: "call-9cc3b.firebaseapp.com",
@@ -244,10 +319,93 @@
         const db = getDatabase(app);
 
         let listaExilados = [];
-        let abaAtual = 'ativos';
+        let isAdminAutenticado = false;
 
-        // Conecta ao nó 'exilios' no banco de dados
-        function carregarExilados() {
+        // Funções Globais expostas ao HTML clássico
+        window.toggleAdminPanel = function() {
+            const panel = document.getElementById('admin-panel');
+            panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+        }
+
+        window.realizarLogin = function() {
+            const email = document.getElementById('auth-email').value.trim();
+            const senha = document.getElementById('auth-password').value.trim();
+
+            if (email === "lucaslcloux12@gmail.com" && senha === "lu012012") {
+                isAdminAutenticado = true;
+                document.getElementById('admin-login-box').style.display = 'none';
+                document.getElementById('admin-tools-box').style.display = 'block';
+                
+                // Exibe controles de edição nos cards existentes
+                document.querySelectorAll('.card-admin-controls').forEach(el => el.style.display = 'flex');
+                alert("Autenticado com sucesso. Modo de edição ativado.");
+            } else {
+                alert("Acesso negado. Credenciais incorretas.");
+            }
+        }
+
+        window.realizarLogout = function() {
+            isAdminAutenticado = false;
+            document.getElementById('auth-email').value = "";
+            document.getElementById('auth-password').value = "";
+            document.getElementById('admin-tools-box').style.display = 'none';
+            document.getElementById('admin-login-box').style.display = 'block';
+            document.getElementById('admin-panel').style.display = 'none';
+            
+            document.querySelectorAll('.card-admin-controls').forEach(el => el.style.display = 'none');
+        }
+
+        // CRUD - Criar Exílio
+        window.adicionarExilio = function() {
+            if (!isAdminAutenticado) return;
+
+            const nome = document.getElementById('exile-nome').value.trim();
+            const autor = document.getElementById('exile-autor').value.trim() || "LucasCloux";
+            const motivo = document.getElementById('exile-motivo').value.trim();
+
+            if (!nome || !motivo) {
+                alert("Preencha o Nome e o Motivo obrigatoriamente!");
+                return;
+            }
+
+            const dataAtual = new Date();
+            const dataFormatada = `${String(dataAtual.getDate()).padStart(2, '0')}/${String(dataAtual.getMonth() + 1).padStart(2, '0')}/${dataAtual.getFullYear()}`;
+
+            const exiliosRef = ref(db, 'exilios');
+            push(exiliosRef, {
+                nome: nome,
+                motivo: motivo,
+                dataExilio: dataFormatada,
+                status: 'ativo',
+                decretadoPor: autor
+            }).then(() => {
+                // Limpa os campos
+                document.getElementById('exile-nome').value = "";
+                document.getElementById('exile-motivo').value = "";
+                alert("Decreto de exílio publicado com sucesso!");
+            }).catch((err) => alert("Erro ao salvar: " + err));
+        }
+
+        // CRUD - Atualizar Status (Perdoar)
+        window.perdoarExilado = function(id, statusAtual) {
+            if (!isAdminAutenticado) return;
+            const novoStatus = statusAtual === 'ativo' ? 'revogado' : 'ativo';
+            
+            const itemRef = ref(db, `exilios/${id}`);
+            update(itemRef, { status: novoStatus });
+        }
+
+        // CRUD - Excluir Registro definitivamente
+        window.deletarExilado = function(id) {
+            if (!isAdminAutenticado) return;
+            if (confirm("Deseja apagar definitivamente este registro do histórico?")) {
+                const itemRef = ref(db, `exilios/${id}`);
+                remove(itemRef);
+            }
+        }
+
+        // Escuta e renderização em tempo real
+        function carregarDados() {
             const exiliosRef = ref(db, 'exilios');
             onValue(exiliosRef, (snapshot) => {
                 const dados = snapshot.val() || {};
@@ -257,39 +415,41 @@
                     listaExilados.push({
                         id: id,
                         nome: dados[id].nome || "Desconhecido",
-                        motivo: dados[id].motivo || "Nenhuma justificativa anexada.",
-                        dataExilio: dados[id].dataExilio || "Data indefinida",
-                        status: dados[id].status || "ativo", // ativo ou revogado
-                        decretadoPor: dados[id].decretadoPor || "Conselho Imperial"
+                        motivo: dados[id].motivo || "Sem justificativa anotada.",
+                        dataExilio: dados[id].dataExilio || "--/--/----",
+                        status: dados[id].status || "ativo",
+                        decretadoPor: dados[id].decretadoPor || "Império"
                     });
                 }
 
-                // Inverte a ordem para mostrar os mais novos primeiro
-                listaExilados.reverse();
-                
-                renderizarListas();
+                listaExilados.reverse(); // Mais novos no topo
+                renderizarMural();
             });
         }
 
-        function renderizarListas() {
-            const containerAtivos = document.getElementById('container-ativos');
-            const containerHistorico = document.getElementById('container-historico');
+        window.filtrarResultados = function() {
+            renderizarMural();
+        }
+
+        function renderizarMural() {
+            const container = document.getElementById('container-exilados');
             const termoBusca = document.getElementById('search-input').value.toLowerCase().trim();
-
-            containerAtivos.innerHTML = '';
-            containerHistorico.innerHTML = '';
-
-            let ativosContados = 0;
-            let historicoContados = 0;
+            
+            container.innerHTML = '';
+            let contadorAtivos = 0;
 
             listaExilados.forEach(item => {
-                // Filtro de pesquisa por Nome ou Motivo
-                const correspondeBusca = item.nome.toLowerCase().includes(termoBusca) || item.motivo.toLowerCase().includes(termoBusca);
-                if (!correspondeBusca) return;
+                const corresponde = item.nome.toLowerCase().includes(termoBusca) || item.motivo.toLowerCase().includes(termoBusca);
+                if (!corresponde) return;
 
-                // Monta o elemento HTML do card
+                if (item.status === 'ativo') contadorAtivos++;
+
                 let card = document.createElement('div');
                 card.className = `exile-card ${item.status === 'revogado' ? 'revogado' : ''}`;
+                
+                // Define visibilidade dos controles com base no login atual
+                const displayControl = isAdminAutenticado ? 'flex' : 'none';
+
                 card.innerHTML = `
                     <div class="exile-header">
                         <span class="exile-name">${item.nome}</span>
@@ -297,60 +457,30 @@
                     </div>
                     <div class="exile-meta">
                         <span>📅 <strong>Data:</strong> ${item.dataExilio}</span>
-                        <span>🛡️ <strong>Origem:</strong> ${item.decretadoPor}</span>
+                        <span>🛡️ <strong>Autoridade:</strong> ${item.decretadoPor}</span>
                     </div>
                     <div class="exile-reason">
                         ${item.motivo}
                     </div>
+                    <div class="card-admin-controls" style="display: ${displayControl};">
+                        <button class="btn-inline btn-inline-forgive" onclick="perdoarExilado('${item.id}', '${item.status}')">
+                            ${item.status === 'ativo' ? 'Perdoar' : 'Reativar'}
+                        </button>
+                        <button class="btn-inline btn-inline-delete" onclick="deletarExilado('${item.id}')">Excluir</button>
+                    </div>
                 `;
-
-                // Distribui o card na aba correta
-                if (item.status === 'ativo') {
-                    containerAtivos.appendChild(card);
-                    ativosContados++;
-                }
-                
-                // O histórico geral exibe absolutamente todos (Ativos e Revogados)
-                containerHistorico.appendChild(card);
-                historicoContados++;
+                container.appendChild(card);
             });
 
-            // Atualiza os contadores superiores dinamicamente
-            document.getElementById('counter-ativos').innerText = `O Império possui ${ativosContados} decreto(s) de exílio ativo(s) no momento.`;
-            document.getElementById('counter-historico').innerText = `Total de ${historicoContados} registro(s) listado(s) no arquivo geral.`;
+            document.getElementById('counter-geral').innerText = `O sistema registra atualmente ${contadorAtivos} exílio(s) ativo(s) de um total de ${listaExilados.length} listados.`;
 
-            // Mensagens caso as listas estejam vazias
-            if (ativosContados === 0) {
-                containerAtivos.innerHTML = '<p class="empty-message">Nenhum exílio ativo encontrado.</p>';
-            }
-            if (historicoContados === 0) {
-                containerHistorico.innerHTML = '<p class="empty-message">Nenhum registro localizado no histórico.</p>';
+            if (listaExilados.length === 0) {
+                container.innerHTML = '<p class="empty-message">Nenhum registro de exílio encontrado na base imperial.</p>';
             }
         }
 
-        // Alternador de Abas do Menu
-        window.switchTab = function(aba) {
-            abaAtual = aba;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-            
-            if(aba === 'ativos') {
-                document.getElementById('tab-ativos').classList.add('active');
-                document.getElementById('section-ativos').classList.add('active');
-            } else {
-                document.getElementById('tab-historico').classList.add('active');
-                document.getElementById('section-historico').classList.add('active');
-            }
-            renderizarListas();
-        }
-
-        // Evento disparado a cada letra digitada no campo de busca
-        window.filtrarResultados = function() {
-            renderizarListas();
-        }
-
-        // Inicializa o carregador automático ao abrir a página
-        carregarExilados();
+        // Execução inicial
+        carregarDados();
     </script>
 </body>
 </html>
